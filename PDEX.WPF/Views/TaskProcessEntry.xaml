@@ -1,0 +1,170 @@
+﻿<Window x:Class="PDEX.WPF.Views.TaskProcessEntry"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        xmlns:local="clr-namespace:PDEX.Core.Extensions;assembly=PDEX.Core"
+        xmlns:model="clr-namespace:PDEX.Core.Enumerations;assembly=PDEX.Core"
+        xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
+        mc:Ignorable="d"
+        Title="{Binding ProcessText}" Height="450" Width="550" 
+        WindowStartupLocation="CenterScreen" Margin="0,0,0,0" WindowState="Maximized"
+        DataContext="{Binding ProcessEntry, Source={StaticResource Locator}}"
+        Background="Transparent" WindowStyle="ThreeDBorderWindow" Closing="Processs_OnClosing"
+        Icon="/PDEX.WPF;component/Resources/pdexicon.ico" Loaded="Window_Loaded">
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/PDEX.WPF;component/Skins/MainSkin.xaml" />
+                <ResourceDictionary Source="/PDEX.WPF;component/Skins/ControlsDictionary.xaml" />
+                <ResourceDictionary Source="/PDEX.WPF;component/Skins/ListViewDictionary.xaml" />
+                <ResourceDictionary Source="/PDEX.WPF;component/Skins/ListBoxDictionary.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+
+    </Window.Resources>
+
+    <Grid x:Name="LayoutRoot">
+        <Border Style="{StaticResource mainBorder}" CornerRadius="0" 
+                TextBlock.FontFamily="Bookman old style" TextBlock.Foreground="White">
+       
+        <Grid Margin="2,0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="2"/>
+                            <RowDefinition Height="40"/>
+                        </Grid.RowDefinitions>
+
+                        <Expander Grid.Row="1" Margin="5,0" Header="Basic" IsExpanded="True"
+                                  TextBlock.Foreground="White">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="2*"/>
+                                    <!--<ColumnDefinition Width="5"/>
+                                    <ColumnDefinition Width="*"/>-->
+                                </Grid.ColumnDefinitions>
+
+                                <Grid Grid.Column="0" Margin="5">
+
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="30"/>
+                                        <RowDefinition Height="30"/>
+                                        <RowDefinition Height="30"/>
+                                        <RowDefinition Height="30"/>
+                                        <RowDefinition Height="30"/>
+                                        <RowDefinition Height="35"/>
+                                        <RowDefinition Height="35"/>
+                                    </Grid.RowDefinitions>
+
+                                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Client:" VerticalAlignment="Center"/>
+                                    <ComboBox  Grid.Row="0" Grid.Column="1" ItemsSource="{Binding Categories, Mode=OneWay}"  HorizontalAlignment="Stretch"
+                                                  DisplayMemberPath="DisplayName" VerticalContentAlignment="Center"
+                                                  SelectedItem="{Binding SelectedCategory}" />
+
+                                    <TextBlock Grid.Row="0" Grid.Column="2" Text="Category:" VerticalAlignment="Center"/>
+                                    <StackPanel Grid.Row="0" Grid.Column="3" Margin="0,3" Orientation="Horizontal" HorizontalAlignment="Stretch">
+                                        <ComboBox MinWidth="140" ItemsSource="{Binding Categories, Mode=OneWay}"  HorizontalAlignment="Stretch"
+                                                  DisplayMemberPath="DisplayName" VerticalContentAlignment="Center"
+                                                  SelectedItem="{Binding SelectedCategory}" />
+                                        <Button Foreground="White" x:Name="BtnAddNewCategory"  Content="  + " FontSize="14" 
+                                                    Command="{Binding AddNewCategoryCommand}" 
+                                                    FontWeight="ExtraBold" Margin="0,0,0,0" ToolTip="Add New Category"/>
+                                    </StackPanel>
+
+                                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Order Time:" VerticalAlignment="Center"/>
+                                    <telerik:RadDateTimePicker Grid.Row="1" Grid.Column="1" x:Name="DtOrderTime"                                         
+									                ToolTip="{Binding (Validation.Errors)[0].ErrorContent, ElementName=DtOrderTime}" 
+									                SelectedValue="{Binding SelectedProcess.OrderTime, Mode=TwoWay, NotifyOnValidationError=True, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" 
+									                Validation.Error="Validation_Error"
+                                                    IsEnabled="True"
+									                VerticalAlignment="Center"/>
+
+                                    <TextBlock Grid.Row="2" Grid.Column="0" Text="Description:" VerticalAlignment="Center"/>
+                                    <TextBox Grid.Row="2" x:Name="CustName" Grid.Column="1" Grid.RowSpan="2" Grid.ColumnSpan="3" TextWrapping="Wrap"
+                                             Text="{Binding SelectedProcess.Description}" Margin="0,5" />
+
+                                   
+
+                                    <TextBlock Grid.Row="6" Grid.Column="0" Text=" Amount Paid:" VerticalAlignment="Center"/>
+                                    <TextBox Grid.Row="6" x:Name="Payment" Grid.Column="1" TextWrapping="Wrap"
+                                             Text="{Binding SelectedProcess.PaymentAmount}" Margin="0,5" />
+
+                                </Grid>
+                            </Grid>
+                        </Expander>
+
+                        <Expander Grid.Row="3" Margin="5,0" Header="Advanced" 
+                                  Visibility="Collapsed"
+                                  IsExpanded="False"
+                                  TextBlock.Foreground="White">
+                            <Grid Margin="5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="30"/>
+                                    <RowDefinition Height="30"/>
+                                    <RowDefinition Height="35"/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Grid.Row="0" Grid.Column="2" Text=" Address: " 
+                                               VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                                <StackPanel Grid.Row="0" Grid.Column="3" Grid.RowSpan="3" Margin="0,5,0,0"
+                                                Orientation="Vertical">
+                                    <ListBox x:Name="LstStaffAddress"  
+                                                 HorizontalAlignment="Stretch" 
+                                                 VerticalContentAlignment="Center"
+                                                 Visibility="Visible" 
+                                                 Background="Transparent" Focusable="False"
+                                                 BorderBrush="Transparent" 
+                                                 MinHeight="70" MinWidth="50" 
+                                                 ItemsSource="{Binding ProcessAdressDetail, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                 ItemTemplate="{DynamicResource AddressBoxDataTemplate}"
+                                                 Style="{StaticResource myListboxStyle}"/>
+
+                                    <Button x:Name="BtnAddress" Margin="5,0"
+                                            Content=" _View/Change Address  " Tag="ProcessAddress" 
+                                            Command="{Binding ProcessAddressViewCommand}" />
+                                </StackPanel>
+                            </Grid>
+                        </Expander>
+
+                        <GridSplitter Grid.Row="4" HorizontalAlignment="Stretch" />
+
+                        <StackPanel Orientation="Horizontal" Grid.Row="5" Background="Transparent" HorizontalAlignment="Right">
+
+                            <Button Content="_Add New" Tag="Add New" x:Name="BtnAddNew"
+                                    Command="{Binding AddNewProcessViewCommand}" 
+                                    CommandParameter="{Binding ElementName=BtnAddNew}"                                     
+                                    Style="{StaticResource bottomButtons}"/>
+
+                            <Button Content="_Save" Tag="Save" x:Name="BtnSave"
+                                    Command="{Binding SaveProcessViewCommand}" 
+                                    CommandParameter="{Binding ElementName=BtnSave}" 
+                                    Style="{StaticResource bottomButtons}" />
+
+                            <Button Content="_Delete" Tag="Delete" x:Name="BtnDelete"
+                                    Command="{Binding DeleteProcessViewCommand}" 
+                                    CommandParameter="{Binding ElementName=BtnDelete}"                                     
+                                    Style="{StaticResource bottomButtons}"/>
+
+                        </StackPanel>
+
+                    </Grid>
+            
+        </Border>
+    </Grid>
+</Window>

@@ -1,0 +1,180 @@
+﻿<Window x:Class="PDEX.WPF.Views.QuickProcess"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
+        mc:Ignorable="d"
+        Title="{Binding HeaderText}" Height="430" Width="600" Name="WdwQuickProcess"
+        WindowStartupLocation="CenterScreen" Margin="0,0,0,0" ResizeMode="NoResize"
+        DataContext="{Binding QuickProcessVm, Source={StaticResource Locator}}"
+        Background="Transparent" WindowStyle="ThreeDBorderWindow" Closing="QuickProcess_OnClosing"
+        Icon="/PDEX.WPF;component/Resources/pdexicon.ico" Loaded="WdwQuickProcess_Loaded">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/PDEX.WPF;component/Skins/MainSkin.xaml" />
+                <ResourceDictionary Source="/PDEX.WPF;component/Skins/ControlsDictionary.xaml" />
+                <ResourceDictionary Source="/PDEX.WPF;component/Skins/ListViewDictionary.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+
+    </Window.Resources>
+
+    <Grid x:Name="LayoutRoot">
+        <Border Style="{StaticResource mainBorder}" CornerRadius="0" 
+                TextBlock.FontFamily="Bookman old style" TextBlock.Foreground="White">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+
+                <Grid Grid.Row="1">
+                    <Grid Margin="2,0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="*"/>
+                            
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="2"/>
+                            <RowDefinition Height="40"/>
+                        </Grid.RowDefinitions>
+
+                        <GroupBox Grid.Row="0" Margin="5,0" Header="Basic Detail" 
+                                  TextBlock.Foreground="White">
+                            <Grid>
+                                <Grid Margin="5">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="30"/>
+                                        <RowDefinition Height="30"/>
+                                        <RowDefinition Height="30"/>
+                                        <!--<RowDefinition Height="30"/>-->
+                                    </Grid.RowDefinitions>
+
+                                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Order No.:" VerticalAlignment="Center"/>
+                                    <TextBox Grid.Row="0" Grid.Column="1" IsEnabled="False"
+                                             Text="{Binding SelectedDelivery.Number}" VerticalAlignment="Center"/>
+
+                                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Order By:" VerticalAlignment="Center"/>
+                                    <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" IsEnabled="False"
+                                             Text="{Binding SelectedDelivery.OrderByClient.DisplayName}" VerticalAlignment="Center"/>
+
+                                    <TextBlock Grid.Row="2" Grid.Column="0" Text="Address:" VerticalAlignment="Center"/>
+                                    <TextBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" IsEnabled="False"
+                                             Text="{Binding SelectedDelivery.OrderByClient.Address.Mobile}" VerticalAlignment="Center"/>
+                                    
+                                    <!--<TextBlock Grid.Row="3" Grid.Column="0" Text="No of Lines:" VerticalAlignment="Center"/>
+                                    <TextBox Grid.Row="3" Grid.Column="1" IsEnabled="False"
+                                             Text="{Binding SelectedDelivery.CountLines}" VerticalAlignment="Center"/>-->
+
+                                </Grid>
+
+                            </Grid>
+                        </GroupBox>
+
+                        <GroupBox Grid.Row="1" Margin="5,0" Header="{Binding HeaderText}"
+                                  TextBlock.Foreground="White">
+                            <Grid Margin="5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="30"/>
+                                    <RowDefinition Height="30"/>
+                                    <RowDefinition Height="30"/>
+                                    <RowDefinition Height="30"/>
+                                    <RowDefinition Height="30"/>
+                                    <RowDefinition Height="30"/>
+                                </Grid.RowDefinitions>
+
+                                <TextBlock Grid.Row="0" Grid.Column="0" Text="Staff:" VerticalAlignment="Center"/>
+                                <ComboBox Grid.Row="0" Grid.Column="1"  VerticalContentAlignment="Center"
+                                      ItemsSource="{Binding Staffs,Mode=OneWay}" 
+                                      DisplayMemberPath="DisplayName" 
+                                      SelectedItem="{Binding SelectedToAcceptStaff}"/>
+                               
+                                <CheckBox Grid.Row="0" Grid.Column="2" Grid.ColumnSpan="2" Name="ChkDeliverDirectly" IsChecked="{Binding DeliverDirectly}"
+                                          Foreground="White" Margin="5,0,0,0" Visibility="{Binding DeliverDirectlyVisibiity}"
+                                          Content="Deliver Directly (ተቅብሎ በዛው ማድረስ)" 
+                                          VerticalAlignment="Center"/>
+
+                                <TextBlock Grid.Row="1" Grid.Column="0" Text="By:" VerticalAlignment="Center"/>
+                                <ComboBox   Grid.Column="1" Grid.Row="1" Margin="0,2"
+                                                x:Name="CmbStaffTypeList"                                           
+                                                ItemsSource="{Binding DeliveryMethodList, Mode= OneWay}"
+                                                SelectedItem="{Binding SelectedDeliveryMethod}"
+                                                DisplayMemberPath="Display"
+                                                VerticalContentAlignment="Center"/>
+
+                                <TextBlock Grid.Row="1" Grid.Column="2" Visibility="{Binding VehicleVisibility}"
+                                           Text=" Vehicle:" VerticalAlignment="Center"/>
+                                <ComboBox Grid.Row="1" Grid.Column="3"  VerticalContentAlignment="Center"
+                                      ItemsSource="{Binding Vehicles,Mode=OneWay}" Visibility="{Binding VehicleVisibility}" 
+                                      DisplayMemberPath="PlateNumber" 
+                                      SelectedItem="{Binding SelectedVehicle}"/>
+
+                                <CheckBox Grid.Row="3" Grid.Column="1" Name="ChkStarted" Checked="ChkStarted_OnChecked" 
+                                          Unchecked="ChkStarted_OnChecked"
+                                          Foreground="White" Content="Started (ተጀምሯል)" VerticalAlignment="Center" />
+                                <TextBlock Grid.Row="3" Grid.Column="2" Text=" Time (ቀንና ሰዐት):" VerticalAlignment="Center"/>
+                                <telerik:RadDateTimePicker Grid.Row="3" Grid.Column="3" x:Name="DtStartDate"                                         
+									ToolTip="{Binding (Validation.Errors)[0].ErrorContent, ElementName=DtStartDate}" 
+									SelectedValue="{Binding SelectedDeliveryRoute.StartedTime, Mode=TwoWay, NotifyOnValidationError=True, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" 
+									Validation.Error="Validation_Error"
+                                    IsEnabled="True"
+									VerticalAlignment="Center"  DateTimeWatermarkContent=" "/>
+                                
+                                <CheckBox Grid.Row="4" Grid.Column="1" Name="ChkAccepted" Checked="ChkAccepted_OnChecked" 
+                                          Unchecked="ChkAccepted_OnChecked"
+                                          Foreground="White" Content=" Completed(ተጠናቋል)" VerticalAlignment="Center"/>
+                                <TextBlock Grid.Row="4" Grid.Column="2" Text=" Time (ቀንና ሰዐት):" VerticalAlignment="Center"/>
+                                <telerik:RadDateTimePicker Grid.Row="4" Grid.Column="3" x:Name="DtEndDate"                                         
+									ToolTip="{Binding (Validation.Errors)[0].ErrorContent, ElementName=DtEndDate}" 
+									SelectedValue="{Binding SelectedDeliveryRoute.EndedTime, Mode=TwoWay, NotifyOnValidationError=True, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" 
+									Validation.Error="Validation_Error"
+                                    IsEnabled="True"
+									VerticalAlignment="Center" DateTimeWatermarkContent=" " />
+                                
+                            </Grid>
+                        </GroupBox>
+                       
+                       
+                        <GridSplitter Grid.Row="3" HorizontalAlignment="Stretch" />
+
+                        <StackPanel Orientation="Horizontal" Grid.Row="4" 
+                                    Background="Transparent" HorizontalAlignment="Right">
+
+                            <Button Content="_Save" Tag="Save" x:Name="BtnSave"
+                                    Command="{Binding SaveDeliveryLineViewCommand}" 
+                                    CommandParameter="{Binding ElementName=WdwQuickProcess}" 
+                                    Style="{StaticResource bottomButtons}" />
+
+                            <!--<Button Content="_Reset" Tag="Reset" x:Name="BtnReset"
+                                    Command="{Binding ResetDeliveryLineViewCommand}" 
+                                    CommandParameter="{Binding ElementName=BtnReset}"                                     
+                                    Style="{StaticResource bottomButtons}"/>-->
+
+                            <Button Content="_Cancel" Tag="Close" x:Name="BtnClose"
+                                    Command="{Binding CloseDeliveryLineViewCommand}" 
+                                    CommandParameter="{Binding ElementName=WdwQuickProcess}"                                     
+                                    Style="{StaticResource bottomButtons}"/>
+
+                        </StackPanel>
+                    </Grid>
+                </Grid>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

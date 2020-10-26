@@ -1,0 +1,133 @@
+﻿<Window x:Class="PDEX.WPF.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="{Binding TitleText}" WindowStartupLocation="CenterScreen" 
+        Background="Transparent"
+        DataContext="{Binding Main, Source={StaticResource Locator}}"
+	    Width="940" Height="550" MinWidth="550" MinHeight="550" 
+        WindowState="Maximized" Icon="../Resources/pdexicon.ico"  FontSize="13.333" FontFamily="./#Bookman Old Style">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/PDEX.WPF;component/Skins/MainSkin.xaml" />
+                <ResourceDictionary Source="/PDEX.WPF;component/Skins/ControlsDictionary.xaml" />
+                <ResourceDictionary Source="/PDEX.WPF;component/Skins/ListViewDictionary.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+
+    </Window.Resources>
+    <Grid>
+       
+        <Grid x:Name="LayoutRoot">
+
+            <Border Style="{StaticResource mainBorder0}">
+
+                <Grid ShowGridLines="False" Grid.Row="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition />
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Menu Grid.Row="0" Height="30" Name="Menu1" Margin="10,0,10,0" 
+                          VerticalAlignment="Top" BorderThickness="2" 
+                          Style="{StaticResource myListboxStyle}"
+                          Foreground="White" FontSize="14" FontWeight="Normal" FontFamily="bookman old style"
+                          HorizontalAlignment="Right" Background="Transparent">
+
+                        <Menu.BitmapEffect>
+                            <DropShadowBitmapEffect />
+                        </Menu.BitmapEffect>
+
+                        <MenuItem Style="{StaticResource myListboxStyle}"  Header="_Files" Foreground="White" >
+
+                            <MenuItem.Icon>
+                                <Image Source="../Resources/document_lined.ico" Stretch="Uniform"/>
+                            </MenuItem.Icon>
+                            <MenuItem Header="_Clients" Foreground="Black" Click="Clients_Click" />
+                            <MenuItem Header="_Staffs" Foreground="Black" Click="Staffs_Click" />
+                            <MenuItem Header="_Vehicles" Foreground="Black" Click="Vehicles_Click" />
+                            <Separator Foreground="White"></Separator>
+                            <MenuItem Header="E_xpenses" x:Name="ExpenseCashLoanListMenuItem" 
+                                      Click="ExpenseCashLoanListMenuItem_Click"
+                                      Foreground="Black" />
+                            <Separator Foreground="White"></Separator>
+                            <MenuItem Header="_Change Password" Foreground="Black" Click="ChangePassword_Click" />
+                            <Separator Foreground="White"></Separator>
+                            <MenuItem Header="C_lose" Foreground="Black"   Click="MenuItem_Click"/>
+                        </MenuItem>
+
+                        <MenuItem Style="{StaticResource myListboxStyle}" Visibility="Visible"
+                                  Header="_Tasks" 
+                                  Foreground="White" FontSize="12" >
+                            <MenuItem.Icon>
+                                <Image Source="../Resources/stock_new_spreadsheet.ico" Stretch="Uniform"/>
+                            </MenuItem.Icon>
+                            <MenuItem Header="Request Dashboard" 
+                                      x:Name="DelRequestMenuItem" Visibility="Visible"   
+                                      Command="{Binding DeliveryViewModelViewCommand}" 
+                                      Foreground="Black" />
+                            <MenuItem Header="Followup Dashboard" 
+                                      x:Name="DelMenuItem" Visibility="Visible"   
+                                      Command="{Binding FollowUpViewModelViewCommand}" 
+                                      Foreground="Black" />
+                            <Separator Foreground="White"></Separator>
+                            <MenuItem Header="Storage" 
+                                      x:Name="StoreMenuItem" Visibility="Visible"   
+                                      Click="StoreMenuItem_OnClick" 
+                                      Foreground="Black" />
+                            <Separator Foreground="White"></Separator>
+                            <MenuItem Header="Process Management" 
+                                      x:Name="ProcessMenuItem" Visibility="Visible"   
+                                      Click="ProcessMenuItem_OnClick" 
+                                      Foreground="Black" />
+                            <Separator Foreground="White"></Separator>
+                            <MenuItem Header="Tender Management" 
+                                      x:Name="TenderMenuItem" Visibility="Visible"   
+                                      Click="TenderMenuItem_OnClick" 
+                                      Foreground="Black" />
+
+
+                        </MenuItem>
+                        
+                        <MenuItem Visibility="Visible" Header="_Administration" Foreground="White" FontSize="12">
+                            <MenuItem.Icon>
+                                <Image Source="../Resources/settings.ico" Stretch="Uniform" />
+                            </MenuItem.Icon>
+
+                            <MenuItem Header="_Company Profile" Visibility="{Binding UserRoles.Admin}" Foreground="Black"
+                                      Click="CompanyMenuItem_Click"/>
+                            <MenuItem Header="_Stores Management" Visibility="{Binding UserRoles.Admin}" Foreground="Black"
+                                      Click="StoresMenuItem_Click"/>
+                            <Separator Foreground="White"></Separator>
+                            <MenuItem Header="_Users" Visibility="{Binding UserRoles.UsersMgmt}" Foreground="Black"
+                                      Click="UsersMenuItem_Click"/>
+                            <MenuItem Header="_Backup/Restore" Foreground="Black" Visibility="{Binding UserRoles.BackupRestore}"
+                                      Click="BackupRestoreMenuItem_Click"/>
+                        </MenuItem>
+
+
+                    </Menu>
+                    <TextBlock Text="{Binding HeaderText}" Grid.Row="0" 
+                               HorizontalAlignment="Left"
+                               FontFamily="Bookman Old Style"
+                               FontSize="24"
+                               FontWeight="Normal"
+                               Foreground="White"/>
+                    <Grid  Grid.Row="1">
+                        <DockPanel LastChildFill="True">
+                            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
+                                <ContentControl Content="{Binding CurrentViewModel, Mode=TwoWay}"   />
+                            </ScrollViewer>
+                        </DockPanel>
+                    </Grid>
+                    <TextBlock Grid.Row="2" Foreground="White" FontFamily="bookman old style"
+                               HorizontalAlignment="Left" VerticalAlignment="Bottom"
+                               Text="Amihan IT Solutions PLC  Copyright&#x00A9; 2013 - 2015"/>
+                </Grid>
+
+
+            </Border>
+        </Grid>
+        <!--/ScrollViewer-->
+    </Grid>
+</Window>

@@ -1,0 +1,164 @@
+﻿<Window x:Class="PDEX.WPF.Views.Documents"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        mc:Ignorable="d" WindowStyle="ThreeDBorderWindow" x:Name="WdwDocuments"
+        Title="Documents..." Height="400" Width="700" 
+        WindowStartupLocation="CenterScreen" Margin="0,20,0,0" 
+        DataContext="{Binding Document, Source={StaticResource Locator}}" ResizeMode="NoResize"
+        Background="Transparent" AllowsTransparency="False" Closing="Documents_OnClosing"
+        Icon="/PDEX.WPF;component/Resources/pdexicon.ico">
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/PDEX.WPF;component/Skins/MainSkin.xaml" />
+                <ResourceDictionary Source="/PDEX.WPF;component/Skins/ControlsDictionary.xaml" />
+                <ResourceDictionary Source="/PDEX.WPF;component/Skins/ListViewDictionary.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+
+    </Window.Resources>
+
+    <Grid x:Name="LayoutRoot" TextBlock.FontFamily="Bookman old style"
+          TextBlock.Foreground="White">
+        <Border Style="{StaticResource mainBorder}" CornerRadius="0">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <StackPanel Grid.Row="1" Margin="5,0"
+                            Orientation="Horizontal" HorizontalAlignment="Right" 
+                            Background="Transparent">
+                </StackPanel>
+
+                <Grid Grid.Row="2">
+                    <Grid Margin="2,0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="2"/>
+                            <RowDefinition Height="40"/>
+                        </Grid.RowDefinitions>
+                        <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" Margin="5,0">
+                            
+                        </StackPanel>
+                        <ListView x:Name="DocumentsListView" Grid.Row="1" MinHeight="50" Margin="5"
+                                  ItemContainerStyle="{StaticResource GridViewItem}" 
+                                  SelectedItem="{Binding SelectedDocument}"                            
+                                  ItemsSource="{Binding Documents}">
+                            <ListView.View>
+                                <GridView AllowsColumnReorder="true" ColumnHeaderContainerStyle="{StaticResource GridViewHeader}">
+                                    <GridViewColumn Header="S.No." DisplayMemberBinding="{Binding SerialNumber}" Width="auto"/>
+                                    <GridViewColumn Header="Date" DisplayMemberBinding="{Binding DateRecordCreatedString}" Width="auto"/>
+                                    <GridViewColumn Header="Category" DisplayMemberBinding="{Binding Category.DisplayName}" Width="auto"/>
+                                    <GridViewColumn Header="Description" DisplayMemberBinding="{Binding DescriptionShort}" Width="250"/>
+                                    <GridViewColumn Header="Unit" DisplayMemberBinding="{Binding Unit}"  Width="auto"/>
+                                    <GridViewColumn Header="Storage" DisplayMemberBinding="{Binding StorageDetail}"  Width="auto"/>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+
+
+                        <Expander Grid.Row="2" Header="Details" 
+                                  IsExpanded="True" Foreground="White">
+                            
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="5"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                
+                                <!--<GridSplitter Grid.Row="1" Height="3" Margin="5,0" HorizontalAlignment="Stretch" />-->
+
+                                <Grid Grid.Row="2" Margin="5">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+
+                                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Category:" VerticalAlignment="Center"/>
+                                    <Grid Grid.Row="0" Grid.Column="1" Margin="0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <ComboBox Grid.Column="0" ItemsSource="{Binding DocumentCategorys, Mode=OneWay}"  
+                                                          DisplayMemberPath="DisplayName"
+                                                          VerticalContentAlignment="Center"
+                                                          SelectedItem="{Binding SelectedDocumentCategory}" />
+                                        <Button Grid.Column="1" Foreground="White" x:Name="BtnAddNewBank"  
+                                                        Content="  + " FontSize="14" 
+                                                        Command="{Binding AddNewDocumentCategoryCommand}" 
+                                                        FontWeight="ExtraBold" Margin="0" 
+                                                        ToolTip="Add New Bank"/>
+                                    </Grid>
+
+                                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Description:" VerticalAlignment="Center"/>
+                                    <TextBox Grid.Row="1"  x:Name="TxtBankBranch" TextWrapping="Wrap"  Grid.Column="1"  Grid.ColumnSpan="5"
+                                                     ToolTip="{Binding (Validation.Errors)[0].ErrorContent, ElementName=TxtBankBranch}" 
+                                                     Text="{Binding SelectedDocument.Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True}" 
+                                                     Validation.Error="Validation_Error" Margin="0,3" />
+
+                                    <TextBlock Grid.Row="0" Grid.Column="2" Text="Qty.:" VerticalAlignment="Center"/>
+                                    <TextBox Grid.Row="0" x:Name="TxtAccountNumber" Grid.Column="3" 
+                                                     ToolTip="{Binding (Validation.Errors)[0].ErrorContent, ElementName=TxtAccountNumber}" 
+                                                     Text="{Binding SelectedDocument.Unit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True}" 
+                                                     Validation.Error="Validation_Error"  Margin="0,3" />
+
+                                    <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="6" Margin="5,0"
+                                                        Background="Transparent" HorizontalAlignment="Right">
+
+                                    </StackPanel>
+
+                                </Grid>
+
+                            </Grid>
+                        </Expander>
+
+                        
+                        <GridSplitter Grid.Row="5" HorizontalAlignment="Stretch" />
+                        <StackPanel Orientation="Horizontal" Grid.Row="6" Background="Transparent" HorizontalAlignment="Right">
+                            <Button Content=" _Add New" Tag="AddNew" x:Name="BtnAddNewBa"
+                                                        Command="{Binding AddNewDocumentCommand}" 
+                                                        CommandParameter="{Binding ElementName=BtnAddNewBa}"                                     
+                                                        Style="{StaticResource bottomButtons}"
+                                    
+                                    Click="BtnAddNewBa_OnClick"/>
+                            
+                            <Button Content="_Save" Tag="Save" x:Name="BtnSaveBa"
+                                                        Command="{Binding SaveDocumentCommand}" Margin="5,0,0,0"
+                                                        CommandParameter="{Binding ElementName=BtnSaveBa}"  
+                                                        Style="{StaticResource bottomButtons}"/>
+
+                            <Button Content="_Delete" Tag="Delete" x:Name="BtnDeleteBa"
+                                                        Command="{Binding DeleteDocumentCommand}" Margin="5,0"
+                                                        CommandParameter="{Binding ElementName=BtnDeleteBa}"
+                                                        Style="{StaticResource bottomButtons}"/>
+                        </StackPanel>
+
+                    </Grid>
+                </Grid>
+
+            </Grid>
+        </Border>
+    </Grid>
+</Window>
+

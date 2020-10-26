@@ -1,0 +1,150 @@
+﻿<Window x:Class="PDEX.WPF.Views.OrderByClientEntry"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        xmlns:local="clr-namespace:PDEX.Core.Extensions;assembly=PDEX.Core"
+        xmlns:model="clr-namespace:PDEX.Core.Enumerations;assembly=PDEX.Core"
+        xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
+        mc:Ignorable="d"
+        Title="Choose Client" Height="330" Width="560" Name="WdwOrderByClient"
+        WindowStartupLocation="CenterScreen" Margin="0,0,0,0" ResizeMode="NoResize"
+        DataContext="{Binding OrderByClientVm, Source={StaticResource Locator}}"
+        Background="Transparent" WindowStyle="ThreeDBorderWindow" Closing="OrderByClientEntry_OnClosing"
+        Icon="/PDEX.WPF;component/Resources/pdexicon.ico" Loaded="Window_Loaded">
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/PDEX.WPF;component/Skins/MainSkin.xaml" />
+                <ResourceDictionary Source="/PDEX.WPF;component/Skins/ControlsDictionary.xaml" />
+                <ResourceDictionary Source="/PDEX.WPF;component/Skins/ListViewDictionary.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+
+    </Window.Resources>
+
+    <Grid x:Name="LayoutRoot">
+        <Border Style="{StaticResource mainBorder}" CornerRadius="0" 
+                TextBlock.FontFamily="Bookman old style" TextBlock.Foreground="White">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+               
+                <Grid Grid.Row="1">
+                    <Grid Margin="2,0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="2"/>
+                            <RowDefinition Height="40"/>
+                        </Grid.RowDefinitions>
+                        <Grid  Grid.Row="0" Margin="5,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Choose Client: "  VerticalAlignment="Center"/>
+                            <telerik:RadAutoCompleteBox Grid.Column="1" Margin="0,0,0,0"
+                                                    x:Name="LstOrderByClientsAutoCompleteBox" 
+                                                    ItemsSource="{Binding OrderByClients, Mode=TwoWay}"
+                                                    SelectedItem="{Binding SelectedOrderByClient, Mode=TwoWay}"
+                                                    HorizontalAlignment="Stretch" 
+                                                    VerticalAlignment="Center"
+                                                    WatermarkContent="Choose Client..."
+											        TextSearchMode="Contains"
+											        AutoCompleteMode="Suggest"
+											        SelectionMode="Single"
+											        TextSearchPath="ClientDetail"											                
+											        BorderBrush="#FF25A0DA" 
+                                                    BorderThickness="2"
+                                                    SelectionChanged="LstOrderByClientsAutoCompleteBox_SelectionChanged"/>
+                        </Grid>
+                        
+                        <Expander Grid.Row="1" Margin="5,0" Header="Basic" 
+                                  IsExpanded="True" TextBlock.Foreground="White">
+                               <Grid>
+                                    <Grid Margin="5">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="30"/>
+                                            <RowDefinition Height="30"/>
+                                            <RowDefinition Height="30"/>
+                                            <RowDefinition Height="30"/>
+                                            <RowDefinition Height="30"/>
+                                    </Grid.RowDefinitions>
+
+                                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Full Name: " VerticalAlignment="Center"/>
+                                    <TextBox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="3" Grid.RowSpan="1" x:Name="TxtOrderByClient" TextWrapping="Wrap"   
+                                             ToolTip="{Binding (Validation.Errors)[0].ErrorContent, ElementName=TxtOrderByClient}" 
+                                             IsEnabled="False" Text="{Binding SelectedOrderByClient.DisplayName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True}" 
+                                                     Validation.Error="Validation_Error"  Margin="0,3" />
+                                        
+                                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Address: " VerticalAlignment="Center"/>
+                                        <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" Grid.RowSpan="1" x:Name="TxtStreetOrderByClient" TextWrapping="Wrap"   ToolTip="{Binding (Validation.Errors)[0].ErrorContent, ElementName=TxtStreetOrderByClient}" 
+                                                 IsEnabled="False" Text="{Binding SelectedOrderByClient.Address.AddressDetail, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True}" 
+                                                     Validation.Error="Validation_Error"  Margin="0,3" />
+
+                                        <TextBlock Grid.Row="2" Grid.Column="0" Text="Mobile: " VerticalAlignment="Center"/>
+                                        <TextBox Grid.Row="2"  x:Name="TxtMobile"  Grid.Column="1" 
+                                                     ToolTip="{Binding (Validation.Errors)[0].ErrorContent, ElementName=TxtMobile}" 
+                                                     IsEnabled="False" Text="{Binding SelectedOrderByClient.Address.Mobile, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True}" 
+                                                     Validation.Error="Validation_Error" Margin="0,3" />
+                                        <TextBlock Grid.Row="2" Grid.Column="2" Text=" Mobile2: " VerticalAlignment="Center"/>
+                                        <TextBox Grid.Row="2"  x:Name="TxtMobile2"  Grid.Column="3" 
+                                                     ToolTip="{Binding (Validation.Errors)[0].ErrorContent, ElementName=TxtMobile2}" 
+                                                     IsEnabled="False" Text="{Binding SelectedOrderByClient.Address.AlternateMobile, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True}" 
+                                                     Validation.Error="Validation_Error" Margin="0,3" />
+
+                                        <TextBlock Grid.Row="3" Grid.Column="0" Text="Telephone: " VerticalAlignment="Center"/>
+                                        <TextBox Grid.Row="3" x:Name="TxtTelephone" Grid.Column="1" 
+                                                     ToolTip="{Binding (Validation.Errors)[0].ErrorContent, ElementName=TxtTelephone}" 
+                                                     IsEnabled="False" Text="{Binding SelectedOrderByClient.Address.Telephone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True}" 
+                                                     Validation.Error="Validation_Error"  Margin="0,3" />
+
+                                        <TextBlock Grid.Row="3" Grid.Column="2" Text=" Email: " VerticalAlignment="Center"/>
+                                        <TextBox Grid.Row="3"  x:Name="TxtEmail"  Grid.Column="3" 
+                                                     ToolTip="{Binding (Validation.Errors)[0].ErrorContent, ElementName=TxtEmail}" 
+                                                     IsEnabled="False" Text="{Binding SelectedOrderByClient.Address.PrimaryEmail, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True}" 
+                                                     Validation.Error="Validation_Error" Margin="0,3" />
+                                    <TextBlock Grid.Row="4" Grid.Column="0" Text=" Code:" VerticalAlignment="Center"/>
+                                    <TextBox Grid.Row="4"  x:Name="TxtCode"  Grid.Column="1" 
+                                                     ToolTip="{Binding SelectedOrderByClient.Code}" 
+                                                     IsEnabled="False" Text="{Binding SelectedOrderByClient.Code, Mode=TwoWay}" 
+                                                     Margin="0,3" />
+
+                                </Grid>
+                                    
+                                </Grid>
+                        </Expander>
+
+                        <GridSplitter Grid.Row="2" HorizontalAlignment="Stretch" />
+                        
+                        <StackPanel Orientation="Horizontal" Grid.Row="3" 
+                                    Background="Transparent" HorizontalAlignment="Right">
+                            
+                            <Button Content="_Add" Tag="Save" x:Name="BtnSave"
+                                    Command="{Binding SaveOrderByClientViewCommand}" 
+                                    CommandParameter="{Binding ElementName=WdwOrderByClient}" 
+                                    Style="{StaticResource bottomButtons}" />
+
+                            <Button Content="_Cancel" Tag="Cancel" x:Name="BtnCancel"
+                                    Click="BtnCancel_OnClick" 
+                                    CommandParameter="{Binding ElementName=BtnCancel}"                                     
+                                    Style="{StaticResource bottomButtons}"/>
+                            
+                        </StackPanel>
+                    </Grid>
+                </Grid>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

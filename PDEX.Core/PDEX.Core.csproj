@@ -1,0 +1,128 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{B9F400E2-D365-4AC0-AD8C-034B0BE3DE37}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>PDEX.Core</RootNamespace>
+    <AssemblyName>PDEX.Core</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework">
+      <HintPath>..\..\AMStock\AMStock\AMStock.WPF\bin\Debug\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\..\AMStock\AMStock\AMStock.WPF\bin\Debug\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServerCompact">
+      <HintPath>..\..\AMStock\AMStock\AMStock.WPF\bin\Debug\EntityFramework.SqlServerCompact.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Device" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Common\CommonUtility.cs" />
+    <Compile Include="Common\CommonFieldsA.cs" />
+    <Compile Include="Common\CommonFieldsB.cs" />
+    <Compile Include="Common\CommonFieldsC.cs" />
+    <Compile Include="Common\CommonFieldsD.cs" />
+    <Compile Include="Common\CommonFieldsE.cs" />
+    <Compile Include="Common\ListDataItem.cs" />
+    <Compile Include="Common\SearchCriteria.cs" />
+    <Compile Include="Common\UserRolesModel.cs" />
+    <Compile Include="CustomValidationAttributes\ExcludeChar.cs" />
+    <Compile Include="CustomValidationAttributes\GreaterThanZero.cs" />
+    <Compile Include="CustomValidationAttributes\Unqiue.cs" />
+    <Compile Include="Common\EntityBase.cs" />
+    <Compile Include="Enumerations\ClientTypes.cs" />
+    <Compile Include="Enumerations\DeliveryLineTypes.cs" />
+    <Compile Include="Enumerations\DeliveryMethods.cs" />
+    <Compile Include="Enumerations\DeliveryStatusTypes.cs" />
+    <Compile Include="Enumerations\DeliverySuggestionTypes.cs" />
+    <Compile Include="Enumerations\DeliveryLineRouteTypes.cs" />
+    <Compile Include="Enumerations\EducationLevel.cs" />
+    <Compile Include="Enumerations\AcceptanceTypes.cs" />
+    <Compile Include="Enumerations\NameTypes.cs" />
+    <Compile Include="Enumerations\PaymentMethods.cs" />
+    <Compile Include="Enumerations\PaymentStatus.cs" />
+    <Compile Include="Enumerations\PaymentTypes.cs" />
+    <Compile Include="Enumerations\ProcessStatusTypes.cs" />
+    <Compile Include="Enumerations\ProcessTypes.cs" />
+    <Compile Include="Enumerations\RoleTypes.cs" />
+    <Compile Include="Enumerations\Sex.cs" />
+    <Compile Include="Enumerations\StaffTypes.cs" />
+    <Compile Include="Enumerations\TaskProcessTypes.cs" />
+    <Compile Include="Enumerations\UserTypes.cs" />
+    <Compile Include="Enumerations\VehicleTypes.cs" />
+    <Compile Include="Extensions\EnumerationExtension.cs" />
+    <Compile Include="Models\AddressDTO.cs" />
+    <Compile Include="Models\ClientDTO.cs" />
+    <Compile Include="Models\CategoryDTO.cs" />
+    <Compile Include="Common\CommonTaskFields.cs" />
+    <Compile Include="Models\CompanyDTO.cs" />
+    <Compile Include="Models\DeliveryHeaderDTO.cs" />
+    <Compile Include="Models\DeliveryLineDTO.cs" />
+    <Compile Include="Models\DeliveryRouteDTO.cs" />
+    <Compile Include="Models\DocumentDTO.cs" />
+    <Compile Include="Models\GPSDTO.cs" />
+    <Compile Include="Models\Interfaces\IObjectState.cs" />
+    <Compile Include="Models\MessageDTO.cs" />
+    <Compile Include="Models\ContactPersonDTO.cs" />
+    <Compile Include="Models\OrdinaryTaskDTO.cs" />
+    <Compile Include="Models\PaymentDTO.cs" />
+    <Compile Include="Models\TaskProcessDTO.cs" />
+    <Compile Include="Models\StaffDTO.cs" />
+    <Compile Include="Models\StorageBinDTO.cs" />
+    <Compile Include="Models\SubTaskProcessDTO.cs" />
+    <Compile Include="Models\TenderDTO.cs" />
+    <Compile Include="Models\TenderItemDTO.cs" />
+    <Compile Include="Models\TenderTaskDTO.cs" />
+    <Compile Include="Models\UserDTO.cs" />
+    <Compile Include="Models\VehicleDTO.cs" />
+    <Compile Include="Common\ObjectState.cs" />
+    <Compile Include="Common\PropertyChangeNotification.cs" />
+    <Compile Include="Common\ReportUtility.cs" />
+    <Compile Include="Common\Singleton.cs" />
+    <Compile Include="Models\WarehouseDTO.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

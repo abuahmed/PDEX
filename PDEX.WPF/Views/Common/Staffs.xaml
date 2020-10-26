@@ -1,0 +1,354 @@
+﻿<Window x:Class="PDEX.WPF.Views.Staffs"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        xmlns:local="clr-namespace:PDEX.Core.Extensions;assembly=PDEX.Core"
+        xmlns:model="clr-namespace:PDEX.Core.Enumerations;assembly=PDEX.Core"  
+        mc:Ignorable="d"
+        Title="{Binding StaffText}" Height="600" Width="900" 
+        WindowStartupLocation="CenterScreen" Margin="0,0,0,0" WindowState="Maximized"
+        DataContext="{Binding Staff, Source={StaticResource Locator}}"
+        Background="Transparent" WindowStyle="ThreeDBorderWindow" Closing="Staffs_OnClosing"
+        Icon="/PDEX.WPF;component/Resources/pdexicon.ico" Loaded="Window_Loaded">
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/PDEX.WPF;component/Skins/MainSkin.xaml" />
+                <ResourceDictionary Source="/PDEX.WPF;component/Skins/ControlsDictionary.xaml" />
+                <ResourceDictionary Source="/PDEX.WPF;component/Skins/ListViewDictionary.xaml" />
+                <ResourceDictionary Source="/PDEX.WPF;component/Skins/ListBoxDictionary.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+
+    </Window.Resources>
+
+    <Grid x:Name="LayoutRoot">
+        <Border Style="{StaticResource mainBorder}" CornerRadius="0" 
+                TextBlock.FontFamily="Bookman old style" TextBlock.Foreground="White">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+
+                <!--Header Begin-->
+
+                <StackPanel Grid.Row="1" Margin="5,0"
+                            Orientation="Horizontal"  HorizontalAlignment="Right"
+                            Background="Transparent">
+                    <ComboBox   Width="140" x:Name="CmbPaymentStatus"                                           
+                                        ItemsSource="{Binding StaffTypeListForFilter, Mode= OneWay}"
+                                        SelectedItem="{Binding SelectedStaffTypeForFilter}"
+                                        DisplayMemberPath="Display"
+                                        Style="{StaticResource comboBoxStyle1}"/>
+
+                    <TextBlock  Text="Search " 
+                            Style="{StaticResource textBlockStyle1}"/>
+
+                    <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}" 
+                             Style="{StaticResource searchTextBox}" Margin="10,0"/>
+                </StackPanel>
+                
+                <Grid Grid.Row="2">
+
+                    <Grid Margin="2,0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="2"/>
+                            <RowDefinition Height="40"/>
+                        </Grid.RowDefinitions>
+
+                        <ListView x:Name="ListView" Grid.Row="1"
+                                  ItemContainerStyle="{StaticResource GridViewItem}" 
+                                  SelectedItem="{Binding SelectedStaff}"                            
+                                  ItemsSource="{Binding Staffs}">
+                            <ListView.View>
+                                <GridView AllowsColumnReorder="true" ColumnHeaderContainerStyle="{StaticResource GridViewHeader}">
+                                    <GridViewColumn Header="Name" DisplayMemberBinding="{Binding DisplayName}"  Width="auto"/>
+                                    <GridViewColumn Header="Sex" DisplayMemberBinding="{Binding Sex}" Width="auto"/>
+                                    <GridViewColumn Header="Position" DisplayMemberBinding="{Binding Type}" Width="auto"/>
+                                    <GridViewColumn Header="Mobile No." DisplayMemberBinding="{Binding Address.Mobile}" Width="auto"/>
+                                    <GridViewColumn Header="Address" DisplayMemberBinding="{Binding Address.AddressDetail}" Width="auto"/>
+                                    <!--<GridViewColumn Header="Max. Allowed Credit" DisplayMemberBinding="{Binding CreditLimit}" Width="auto"/>
+                                    <GridViewColumn Header="Outstanding Credit" DisplayMemberBinding="{Binding TotalCreditString}"  Width="auto"/>-->
+                                    <!--<GridViewColumn Header="Outstanding Transactions" DisplayMemberBinding="{Binding TotalNoOfOutstandingTransactions}"  Width="auto"/>
+                                    <GridViewColumn Header="Credit Limit" DisplayMemberBinding="{Binding CreditLimit}"  Width="auto"/>
+                                    <GridViewColumn Header="Max Transactions Limit" DisplayMemberBinding="{Binding MaxNoCreditTransactions}"  Width="auto"/>-->
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+
+                        <Expander Grid.Row="2" Margin="5,0" Header="Staff Detail" 
+                                  IsExpanded="True" TextBlock.Foreground="White">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="3*"/>
+                                    <ColumnDefinition Width="5"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <Grid Grid.Column="0" Margin="5">
+
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition  Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="1.3*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="30"/>
+                                        <RowDefinition Height="30"/>
+                                        <RowDefinition Height="30"/>
+                                        <RowDefinition Height="30"/>
+                                        <RowDefinition Height="30"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+
+                                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Full Name:" VerticalAlignment="Center"/>
+                                    <TextBox x:Name="TXtCustName" Grid.Row="0" Grid.ColumnSpan="3" Grid.Column="1" 
+                                             ToolTip="{Binding (Validation.Errors)[0].ErrorContent, ElementName=TXtCustName}"
+                                             Text="{Binding SelectedStaff.DisplayName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True,NotifyOnValidationError=True}" 
+                                             Validation.Error="Validation_Error" Margin="0,5,0,5"  />
+                                   
+                                    <TextBlock Text="Position: " Grid.Column="0" Grid.Row="1" VerticalAlignment="Center"/>
+                                    <ComboBox   Grid.Column="1" Grid.Row="1" Margin="0"
+                                                x:Name="CmbStaffTypeList"                                           
+                                                ItemsSource="{Binding StaffTypeList, Mode= OneWay}"
+                                                SelectedItem="{Binding SelectedStaffType}"
+                                                DisplayMemberPath="Display"
+                                                Style="{StaticResource comboBoxStyle1}"/>
+
+                                    <TextBlock Grid.Row="1" Grid.Column="2" Text=" File No.:" VerticalAlignment="Center"/>
+                                    <TextBox x:Name="TXtCustCode" Grid.Row="1"  Grid.Column="3" IsEnabled="False"
+                                             ToolTip="{Binding (Validation.Errors)[0].ErrorContent, ElementName=TXtCustCode}"
+                                             Text="{Binding SelectedStaff.Code, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True,NotifyOnValidationError=True}" 
+                                             Validation.Error="Validation_Error" Margin="0,5,0,5" />
+                                    
+                                    <TextBlock Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" 
+									            Text="Sex:"/>
+                                    <ComboBox Grid.Column="1" Grid.Row="2" x:Name="CmbSex"  Margin="0,2" SelectedIndex="0"
+									            SelectedValue="{Binding SelectedStaff.Sex, Mode=TwoWay}" VerticalContentAlignment="Center"
+									            ItemsSource="{Binding Mode=OneWay, Source={local:Enumeration {x:Type model:Sex}}}" 
+									            Validation.ErrorTemplate="{x:Null}" 
+									            DisplayMemberPath="Description" 
+									            SelectedValuePath="Value"/>
+
+                                    <TextBlock Grid.Column="2" Grid.Row="2" Text=" Birth Date:" VerticalAlignment="Center"/>
+                                    <StackPanel Grid.Column="3" Grid.Row="2" Orientation="Horizontal" >
+                                        <DatePicker  x:Name="DtBirthDate" Width="auto"  VerticalAlignment="Center"                                 
+									        Text="{Binding SelectedStaff.DateOfBirth, Mode=TwoWay}" 
+									        SelectedDateChanged="dtBirthDate_SelectedDateChanged"/>
+                                        <TextBlock VerticalAlignment="Center" x:Name="LblEcText" Text="{Binding SelectedStaff.BirthDateEc}" 
+                                                   Margin="5,0,0,0"/>
+                                        <TextBox VerticalAlignment="Center" x:Name="LblAge" IsEnabled="False"
+                                                 Text="{Binding SelectedStaff.Age,Mode=TwoWay}" 
+                                                   FontWeight="Bold" Margin="2,0,0,0" Width="30"/>
+                                    </StackPanel>
+
+                                    <CheckBox Grid.Row="3" Grid.Column="1" Content="Is Active" 
+                                              IsChecked="{Binding SelectedStaff.IsActive, Mode=TwoWay}" 
+                                              VerticalAlignment="center" FontSize="14" Foreground="White"/>
+                                    
+                                    <TextBlock Grid.Row="4" Grid.Column="0" Text="More Description:" 
+                                               VerticalAlignment="Top"/>
+                                    <TextBox Grid.Row="4" Grid.Column="1" Grid.RowSpan="2" Grid.ColumnSpan="2" TextWrapping="Wrap"
+                                             Text="{Binding SelectedStaff.Description}" Margin="0" />
+
+                                    <StackPanel Grid.Row="4" Grid.Column="3" Grid.RowSpan="2" 
+                                                Orientation="Vertical">
+                                        <ListBox Margin="5,0" x:Name="LstStaffAddress"  
+                                                 HorizontalAlignment="Stretch" 
+                                                 VerticalContentAlignment="Center"
+                                                 Visibility="Visible" 
+                                                 Background="Transparent" Focusable="False"
+                                                 BorderBrush="Transparent"
+                                                 MinHeight="50" MinWidth="50" 
+                                                 ItemsSource="{Binding StaffAdressDetail, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                 ItemTemplate="{DynamicResource AddressBoxDataTemplate}"
+                                                 Style="{StaticResource myListboxStyle}"/>
+
+                                        <Button x:Name="BtnAddress" Margin="5,0"
+                                            Content=" _View/Change Address " Tag="StaffAddress" 
+                                            Command="{Binding StaffAddressViewCommand}" />
+                                    </StackPanel>
+                                    
+
+                                </Grid>
+
+                                <!--<GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />-->
+
+                                <Grid Grid.Column="2" >
+                                    <Grid Margin="5">
+                                        <StackPanel Margin="0,0,0,0">
+                                            <DockPanel LastChildFill="True" Background="#Fffe6700">
+                                                <Image  Name="ImgbtnEmployeeShortImage" HorizontalAlignment="Stretch"
+                                                        Height="190" 
+                                                        
+                                                        DockPanel.Dock="Top"
+                                                        Source="{Binding EmployeeShortImage}" 
+                                                        Stretch="Fill"/>
+                                                <Button  Content="_Browse Photo"
+                                                         Name="BtnEmployeeShortImage" 
+                                                         DockPanel.Dock="Bottom"
+                                                         Command="{Binding ShowEmployeeShortImageCommand}" 
+                                                         Margin="0,5,0,0"
+                                                         VerticalAlignment="Center"/>
+                                            </DockPanel>
+                                        </StackPanel>
+
+                                    </Grid>
+                                </Grid>
+
+                            </Grid>
+                        </Expander>
+
+                        <Expander Grid.Row="3" Margin="5,0"
+                                  Header="Emergency/Contact Person Detail" HorizontalAlignment="Stretch" 
+                                              IsExpanded="False"
+                                              TextBlock.Foreground="White">
+
+                            <Grid Margin="5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="30"/>
+                                    <RowDefinition Height="30"/>
+                                    <RowDefinition Height="30"/>
+                                </Grid.RowDefinitions>
+
+                                <TextBlock Grid.Row="0" Grid.Column="0" Text="Full Name:" VerticalAlignment="Center"/>
+                                <TextBox x:Name="TxtContactName" Grid.Row="0" Grid.ColumnSpan="3" Grid.Column="1" 
+                                             ToolTip="{Binding (Validation.Errors)[0].ErrorContent, ElementName=TxtContactName}"
+                                             Text="{Binding SelectedStaff.ContactPerson.DisplayName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True,NotifyOnValidationError=True}" 
+                                             Validation.Error="Validation_Error" Margin="0,5,0,5" />
+
+                                <TextBlock Grid.Column="4" Grid.Row="0" VerticalAlignment="Center" 
+									            Text=" Sex:"/>
+                                <ComboBox Grid.Column="5" Grid.Row="0" x:Name="ContactSex"  Margin="0,2" SelectedIndex="0"
+									            SelectedValue="{Binding SelectedStaff.ContactPerson.Sex, Mode=TwoWay}" VerticalContentAlignment="Center"
+									            ItemsSource="{Binding Mode=OneWay, Source={local:Enumeration {x:Type model:Sex}}}" 
+									            Validation.ErrorTemplate="{x:Null}"  Background="Transparent"
+									            DisplayMemberPath="Description" 
+									            SelectedValuePath="Value"/>
+
+                                <TextBlock Grid.Row="1" Grid.Column="0" Text="Work:" VerticalAlignment="Center"/>
+                                <TextBox x:Name="TxtContactWork" Grid.Row="1" Grid.Column="1" 
+                                             ToolTip="{Binding (Validation.Errors)[0].ErrorContent, ElementName=TxtContactWork}"
+                                             Text="{Binding SelectedStaff.ContactPerson.Work, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True,NotifyOnValidationError=True}" 
+                                             Validation.Error="Validation_Error" Margin="0,5,0,5" />
+
+                                <TextBlock Grid.Row="1" Grid.Column="2" Text=" Monthly Income: " VerticalAlignment="Center"/>
+                                <TextBox x:Name="TxtContactIncome" Grid.Row="1" Grid.Column="3" 
+                                             ToolTip="{Binding (Validation.Errors)[0].ErrorContent, ElementName=TxtContactIncome}"
+                                             Text="{Binding SelectedStaff.ContactPerson.MonthlyIncome, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True,NotifyOnValidationError=True}" 
+                                             Validation.Error="Validation_Error" Margin="0,5,0,5" />
+                                
+                                <TextBlock Grid.Row="2" Grid.Column="0" Text="Address: " 
+                                           VerticalAlignment="Center"/>
+                                <Grid Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="5">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <ListBox Margin="0" x:Name="LstContactAddress"  
+                                                 HorizontalAlignment="Stretch" 
+                                                 VerticalAlignment="Center"
+                                                 Visibility="Visible" 
+                                                 Background="Transparent" Focusable="False"
+                                                 BorderBrush="Transparent"
+                                                 MinWidth="50" 
+                                                 ItemsSource="{Binding ContactAdressDetail, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                 ItemTemplate="{DynamicResource AddressBoxHorizontalDataTemplate}"
+                                                 Style="{StaticResource myListboxStyle}"/>
+
+                                    <Button Grid.Column="1" x:Name="BtnContactAddress" Margin="5,0"
+                                            Content=" _View/Change Contact Address " Tag="ContactAddress" 
+                                            Command="{Binding StaffContactAddressViewCommand}" />
+                                </Grid>
+                             
+                            </Grid>
+
+                        </Expander>
+                        
+                        <Expander Grid.Row="4" Margin="5,0" Header="More Detail" 
+                                  IsExpanded="False"
+                                  TextBlock.Foreground="White">
+
+                            <Grid Margin="5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="30"/>
+                                </Grid.RowDefinitions>
+
+                                <TextBlock Grid.Row="0" Grid.Column="0" Text="Education Level:" VerticalAlignment="Center"/>
+                                <ComboBox Grid.Column="1" Grid.Row="0" x:Name="CmbEducationLevel"  Margin="0,2" SelectedIndex="0"
+									            SelectedValue="{Binding SelectedStaff.EducationLevel, Mode=TwoWay}" VerticalContentAlignment="Center"
+									            ItemsSource="{Binding Mode=OneWay, Source={local:Enumeration {x:Type model:EducationLevelTypes}}}" 
+									            Validation.ErrorTemplate="{x:Null}" 
+									            DisplayMemberPath="Description" 
+									            SelectedValuePath="Value"/>
+                                
+                                <TextBlock Grid.Row="0" Grid.Column="2" Text=" Field Of Study:"  VerticalAlignment="Center"/>
+                                <TextBox x:Name="TxtFieldOfStudy" Grid.Row="0" Grid.Column="3" 
+                                             ToolTip="{Binding (Validation.Errors)[0].ErrorContent, ElementName=TxtFieldOfStudy}"
+                                             Text="{Binding SelectedStaff.FieldOfStudy, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True,NotifyOnValidationError=True}" 
+                                             Validation.Error="Validation_Error" Margin="0,5,0,5" />
+                                
+                                <TextBlock Grid.Row="0" Grid.Column="4" Text=" Skill:" VerticalAlignment="Center"/>
+                                <TextBox x:Name="TxtSkill" Grid.Row="0" Grid.Column="5" 
+                                             ToolTip="{Binding (Validation.Errors)[0].ErrorContent, ElementName=TxtSkill}"
+                                             Text="{Binding SelectedStaff.Skill, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True,NotifyOnValidationError=True}" 
+                                             Validation.Error="Validation_Error" Margin="0,5,0,5" />
+                            </Grid>
+                        </Expander>
+
+                        <GridSplitter Grid.Row="5" HorizontalAlignment="Stretch" />
+                        <!--Bottom Buttons Begin-->
+                        <StackPanel Orientation="Horizontal" Grid.Row="6" Background="Transparent" HorizontalAlignment="Right">
+
+                            <Button Content="_Add New Staff" Tag="Add New" x:Name="BtnAddNew"
+                                    Command="{Binding AddNewStaffViewCommand}" Click="BtnAddNew_OnClick"
+                                    CommandParameter="{Binding ElementName=BtnAddNew}"                                     
+                                    Style="{StaticResource bottomButtons}"/>
+
+                            <Button Content="_Save" Tag="Save" x:Name="BtnSave"
+                                    Command="{Binding SaveStaffViewCommand}" 
+                                    CommandParameter="{Binding ElementName=BtnSave}" 
+                                    Style="{StaticResource bottomButtons}" />
+
+                            <Button Content="_Delete" Tag="Delete" x:Name="BtnDelete"
+                                    Command="{Binding DeleteStaffViewCommand}" 
+                                    CommandParameter="{Binding ElementName=BtnDelete}"                                     
+                                    Style="{StaticResource bottomButtons}"/>
+
+                        </StackPanel>
+                        <!--Bottom Buttons End-->
+                    </Grid>
+                </Grid>
+
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

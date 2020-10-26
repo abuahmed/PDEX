@@ -1,0 +1,186 @@
+﻿<Window x:Class="PDEX.WPF.Views.TenderEntry"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
+        AllowDrop="True"
+        Title="{Binding HeaderText}" WindowStartupLocation="CenterScreen" WindowStyle="ThreeDBorderWindow"
+        Background="Transparent" AllowsTransparency="False" x:Name="WdwTenderLoanEntry"
+        DataContext="{Binding TenderEntry, Source={StaticResource Locator}}"
+        Height="480" Width="580" Icon="/PDEX.WPF;component/Resources/pdexicon.ico" 
+        ResizeMode="NoResize" 
+        Loaded="WdwTenderLoanEntry_Loaded">
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/PDEX.WPF;component/Skins/MainSkin.xaml" />
+                <ResourceDictionary Source="/PDEX.WPF;component/Skins/ControlsDictionary.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+
+    </Window.Resources>
+
+    <Grid>
+        <Border Style="{StaticResource mainBorder}" CornerRadius="0" >
+
+            <Grid ShowGridLines="False" TextBlock.FontSize="14" Margin="5" TextBlock.FontStretch="Expanded">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="0"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="3"/>
+                    <RowDefinition Height="40"/>
+                </Grid.RowDefinitions>
+
+                <!--<StackPanel Grid.Row="0">
+                    <Button x:Name="btnClose" 
+                            Style="{StaticResource closeWindowButtons}"
+                            IsCancel="True"/>
+
+                    <TextBlock Text="Add Tender" Margin="5,0,0,0"
+                           Style="{StaticResource windowTextBlockHeader}" FontFamily="Bookman old style" />
+                    <Separator Background="White" Margin="5,0" Height="3"/>
+                    </StackPanel>-->
+
+                <Grid Margin="5" Grid.Row="1"
+                      TextBlock.Foreground="White"
+                      TextBlock.FontFamily="Bookman old style" 
+                      TextBlock.FontSize="12">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="30"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock  Text="Tender Number: " 
+                                Grid.Column="0" Grid.Row="0"
+                                Foreground="White"                                              
+                                VerticalAlignment="Center" Margin="0"/>
+                    <TextBox    x:Name="TxtTenderNo" Grid.Column="1" Grid.Row="0" 
+                                        ToolTip="{Binding (Validation.Errors)[0].ErrorContent, ElementName=TxtTenderNo}" 
+                                        Text="{Binding SelectedTender.TenderNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True,NotifyOnValidationError=True}" 
+                                        Validation.Error="Validation_Error"
+                                        TextWrapping="Wrap" VerticalContentAlignment="Center" Margin="0,2"
+                                        HorizontalAlignment="Stretch"/>
+                    <TextBlock  Text=" Published On: " 
+                                Grid.Column="2" Grid.Row="0"
+                                Foreground="White"                                              
+                                VerticalAlignment="Center" Margin="0"/>
+                    
+                    <TextBlock  Text="Published Address: " 
+                                Grid.Column="0" Grid.Row="1"
+                                Foreground="White"                                              
+                                VerticalAlignment="Center" Margin="0"/>
+                    <TextBox    x:Name="TxtPostAddress" Grid.Column="1" Grid.Row="0" 
+                                        ToolTip="{Binding (Validation.Errors)[0].ErrorContent, ElementName=TxtPostAddress}" 
+                                        Text="{Binding SelectedTender.PublishedAddress, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True,NotifyOnValidationError=True}" 
+                                        Validation.Error="Validation_Error"
+                                        TextWrapping="Wrap" VerticalContentAlignment="Center" Margin="0,2"
+                                        HorizontalAlignment="Stretch"/>
+                    
+                    <TextBlock  Text=" Post Date: " 
+                                Grid.Column="2" Grid.Row="1"
+                                Foreground="White"                                              
+                                VerticalAlignment="Center" Margin="0"/>
+                    <telerik:RadDateTimePicker   Grid.Column="3" Grid.Row="1" x:Name="DtTenderPostDate"                                        
+									ToolTip="{Binding (Validation.Errors)[0].ErrorContent, ElementName=DtTenderPostDate}" 
+									SelectedValue="{Binding SelectedTender.BidOpenningDate, Mode=TwoWay, NotifyOnValidationError=True, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" 
+									Validation.Error="Validation_Error"
+									VerticalAlignment="Center"/>
+                    <TextBlock  Text="Company: " 
+                                Grid.Column="0" Grid.Row="2"
+                                Foreground="White"                                              
+                                VerticalAlignment="Center" Margin="0"/>
+                    <TextBox    x:Name="TxtCompany" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="3"
+                                        ToolTip="{Binding (Validation.Errors)[0].ErrorContent, ElementName=TxtCompany}" 
+                                        Text="{Binding SelectedTender.CompanyName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True,NotifyOnValidationError=True}" 
+                                        Validation.Error="Validation_Error"
+                                        TextWrapping="Wrap" VerticalContentAlignment="Center" Margin="0,2"
+                                        HorizontalAlignment="Stretch"/>
+                    
+                    <TextBlock  Text="Company Address: " 
+                                Grid.Column="0" Grid.Row="3"
+                                Foreground="White"                                              
+                                VerticalAlignment="Center" Margin="0"/>
+                    <TextBlock  Text="Bid Opening Date: " 
+                                Grid.Column="0" Grid.Row="4"
+                                Foreground="White"                                              
+                                VerticalAlignment="Center" Margin="0"/>
+                    <telerik:RadDateTimePicker   Grid.Column="1" Grid.Row="4" x:Name="DtTenderOpeningDate"                                        
+									ToolTip="{Binding (Validation.Errors)[0].ErrorContent, ElementName=DtTenderOpeningDate}" 
+									SelectedValue="{Binding SelectedTender.BidOpenningDate, Mode=TwoWay, NotifyOnValidationError=True, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" 
+									Validation.Error="Validation_Error"
+									VerticalAlignment="Center"/>
+
+                    <TextBlock  Text=" Bid Closing Date: " 
+                                Grid.Column="2" Grid.Row="4"
+                                Foreground="White"                                              
+                                VerticalAlignment="Center" Margin="0"/>
+                    <telerik:RadDateTimePicker   Grid.Column="3" Grid.Row="4" x:Name="DtTenderClosingDate"                                        
+									ToolTip="{Binding (Validation.Errors)[0].ErrorContent, ElementName=DtTenderClosingDate}" 
+									SelectedValue="{Binding SelectedTender.BidClosingDate, Mode=TwoWay, NotifyOnValidationError=True, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" 
+									Validation.Error="Validation_Error"
+									VerticalAlignment="Center"/>
+
+                    <TextBlock  Text="Bid Document Price: " 
+                                Grid.Column="0" Grid.Row="5"
+                                Foreground="White"                                              
+                                VerticalAlignment="Center" Margin="0"/>
+                    <TextBox    x:Name="TxtDocumentPrice" Grid.Column="1" Grid.Row="5" 
+                                        ToolTip="{Binding (Validation.Errors)[0].ErrorContent, ElementName=TxtDocumentPrice}" 
+                                        Text="{Binding SelectedTender.BidDocumentPrice, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True,NotifyOnValidationError=True}" 
+                                        Validation.Error="Validation_Error"
+                                        TextWrapping="Wrap" VerticalContentAlignment="Center" Margin="0,2"
+                                        HorizontalAlignment="Stretch"/>
+
+                    <TextBlock  Text=" Bid Bond Price: " 
+                                Grid.Column="2" Grid.Row="5"
+                                Foreground="White"                                              
+                                VerticalAlignment="Center" Margin="0"/>
+                    <TextBox    x:Name="TxtBondPrice" Grid.Column="3" Grid.Row="5" 
+                                        ToolTip="{Binding (Validation.Errors)[0].ErrorContent, ElementName=TxtBondPrice}" 
+                                        Text="{Binding SelectedTender.BidBondPrice, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True,NotifyOnValidationError=True}" 
+                                        Validation.Error="Validation_Error"
+                                        TextWrapping="Wrap" VerticalContentAlignment="Center" Margin="0,2"
+                                        HorizontalAlignment="Stretch"/>
+
+                </Grid>
+                <GridSplitter Grid.Row="2" Height="3" HorizontalAlignment="Stretch" />
+
+                <StackPanel Grid.Row="3" Margin="0,3" 
+                            Orientation="Horizontal"
+                            HorizontalAlignment="Right">
+
+                    <!--<Button Content="_Add New"
+                            Command="{Binding AddNewTenderCommand}" 
+                            x:Name="btnAddNew" 
+                            CommandParameter="{Binding ElementName=wdwTenderLoanEntry}" 
+                            Margin="0" Width="100"
+                            IsDefault="True"/>-->
+                    <Button Content="_Save" 
+                            Command="{Binding SaveTenderCommand}" 
+                            x:Name="BtnSaveClose" 
+                            CommandParameter="{Binding ElementName=WdwTenderLoanEntry}" 
+                            Margin="5,0,0,0" Width="100"
+                            IsDefault="True"/>
+                    <Button Content="_Cancel" 
+                            Command="{Binding CloseTenderLoanViewCommand}" 
+                            CommandParameter="{Binding ElementName=WdwTenderLoanEntry}" 
+                            Margin="5,0,0,0" Width="100"/>
+
+                </StackPanel>
+
+            </Grid>
+        </Border>
+    </Grid>
+</Window>
+

@@ -1,0 +1,255 @@
+﻿<Window x:Class="PDEX.WPF.Views.Clients"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        xmlns:local="clr-namespace:PDEX.Core.Extensions;assembly=PDEX.Core"
+        xmlns:model="clr-namespace:PDEX.Core.Enumerations;assembly=PDEX.Core"  
+        mc:Ignorable="d"
+        Title="{Binding ClientText}" Height="600" Width="700" 
+        WindowStartupLocation="CenterScreen" Margin="0,0,0,0" WindowState="Maximized"
+        DataContext="{Binding Client, Source={StaticResource Locator}}"
+        Background="Transparent" WindowStyle="ThreeDBorderWindow" Closing="Clients_OnClosing"
+        Icon="/PDEX.WPF;component/Resources/pdexicon.ico" Loaded="Window_Loaded">
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/PDEX.WPF;component/Skins/MainSkin.xaml" />
+                <ResourceDictionary Source="/PDEX.WPF;component/Skins/ControlsDictionary.xaml" />
+                <ResourceDictionary Source="/PDEX.WPF;component/Skins/ListViewDictionary.xaml" />
+                <ResourceDictionary Source="/PDEX.WPF;component/Skins/ListBoxDictionary.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+
+    </Window.Resources>
+
+    <Grid x:Name="LayoutRoot">
+        <Border Style="{StaticResource mainBorder}" CornerRadius="0" 
+                TextBlock.FontFamily="Bookman old style" TextBlock.Foreground="White">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+
+                <StackPanel Grid.Row="1" Margin="5,0"
+                            Orientation="Horizontal"  HorizontalAlignment="Right"
+                            Background="Transparent">
+                    
+                    <TextBlock  Text="{Binding NoOfClients}" 
+                            Style="{StaticResource textBlockStyle2}" Margin="5,0"/>
+                    
+                    <TextBlock  Text="Search " 
+                            Style="{StaticResource textBlockStyle1}" Margin="25,0,0,0"/>
+
+                    <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}" 
+                             Style="{StaticResource searchTextBox}" Margin="5,0,0,0"/>
+                    
+                    <Button Content="_Refresh List" Tag="Refresh" x:Name="BtnRefresh"
+                                    Command="{Binding RefreshClientViewCommand}" 
+                                    CommandParameter="{Binding ElementName=BtnRefresh}"                                     
+                                    Style="{StaticResource bottomButtons}" Margin="25,0,0,0"/>
+                </StackPanel>
+                <!--Header End-->
+
+
+                <Grid Grid.Row="2">
+
+                    <Grid Margin="2,0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="2"/>
+                            <RowDefinition Height="40"/>
+                        </Grid.RowDefinitions>
+
+                        <ListView x:Name="ListView" Grid.Row="1"
+                                  ItemContainerStyle="{StaticResource GridViewItem}" 
+                                  SelectedItem="{Binding SelectedClient}"                            
+                                  ItemsSource="{Binding Clients}">
+                            <ListView.View>
+                                <GridView AllowsColumnReorder="true" ColumnHeaderContainerStyle="{StaticResource GridViewHeader}">
+                                    <GridViewColumn Header="S.No." DisplayMemberBinding="{Binding SerialNumber}"  Width="auto"/>
+                                    <GridViewColumn Header="File.No." DisplayMemberBinding="{Binding Number}"  Width="auto"/>
+                                    <GridViewColumn Header="Name" DisplayMemberBinding="{Binding DisplayNameShort}"  Width="auto"/>
+                                    <GridViewColumn Header="Category" DisplayMemberBinding="{Binding Category.DisplayName}" Width="auto"/>
+                                    <!--<GridViewColumn Header="Telephone" DisplayMemberBinding="{Binding Address.Telephone}" Width="auto"/>-->
+                                    <GridViewColumn Header="Mobile No." DisplayMemberBinding="{Binding Address.Mobile}" Width="auto"/>
+                                    <GridViewColumn Header="No. Of Documents" DisplayMemberBinding="{Binding NoOfDocuments}" Width="auto"/>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+
+                        <Expander Grid.Row="2" Margin="5,0" Header="Basic" 
+                                  IsExpanded="True" TextBlock.Foreground="White">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="2*"/>
+                                    <!--<ColumnDefinition Width="5"/>
+                                    <ColumnDefinition Width="*"/>-->
+                                </Grid.ColumnDefinitions>
+
+                                <Grid Grid.Column="0" Margin="5">
+
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="30"/>
+                                        <RowDefinition Height="30"/>
+                                        <RowDefinition Height="30"/>
+                                        <RowDefinition Height="30"/>
+                                        <RowDefinition Height="30"/>
+                                        <RowDefinition Height="35"/>
+                                        <RowDefinition Height="35"/>
+                                    </Grid.RowDefinitions>
+                                    
+                                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Type:" VerticalAlignment="Center"/>
+                                    <ComboBox Grid.Column="1" Grid.Row="0" x:Name="CmbSex"  Margin="0,2" SelectedIndex="0"
+									            SelectedValue="{Binding SelectedClient.Type, Mode=TwoWay}" VerticalContentAlignment="Center"
+									            ItemsSource="{Binding Mode=OneWay, Source={local:Enumeration {x:Type model:ClientTypes}}}" 
+									            Validation.ErrorTemplate="{x:Null}"  
+									            DisplayMemberPath="Description" 
+									            SelectedValuePath="Value"/>
+
+                                    <TextBlock Grid.Row="0" Grid.Column="2" Text=" File No.:" VerticalAlignment="Center"/>
+                                    <TextBox x:Name="CustName" Grid.Row="0" Grid.Column="3" IsEnabled="True"
+                                             ToolTip="{Binding (Validation.Errors)[0].ErrorContent, ElementName=CustName}"
+                                             Text="{Binding SelectedClient.Number, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True,NotifyOnValidationError=True}" 
+                                             Validation.Error="Validation_Error" Margin="0,5,0,5" />
+
+                                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Name:" VerticalAlignment="Center"/>
+                                    <TextBox x:Name="Name" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" Margin="0,5,0,5" 
+                                             ToolTip="{Binding (Validation.Errors)[0].ErrorContent, ElementName=Name}" 
+                                             Text="{Binding SelectedClient.DisplayName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True,NotifyOnValidationError=True}" 
+                                             Validation.Error="Validation_Error"  />
+
+                                    <TextBlock Grid.Row="2" Grid.Column="0" Text="Contact Name:" VerticalAlignment="Center"/>
+                                    <TextBox x:Name="ContactName" Grid.Row="2" Grid.Column="1" Margin="0,5,0,5" 
+                                             ToolTip="{Binding (Validation.Errors)[0].ErrorContent, ElementName=ContactName}" 
+                                             Text="{Binding SelectedClient.ContactName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True,NotifyOnValidationError=True}" 
+                                             Validation.Error="Validation_Error"  />
+
+                                    <TextBlock Grid.Row="2" Grid.Column="2" Text=" Contact Title:" VerticalAlignment="Center"/>
+                                    <TextBox x:Name="ContactTitle" Grid.Row="2" Grid.Column="3" Margin="0,5,0,5" 
+                                             ToolTip="{Binding (Validation.Errors)[0].ErrorContent, ElementName=ContactTitle}" 
+                                             Text="{Binding SelectedClient.ContactTitle, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True,NotifyOnValidationError=True}" 
+                                             Validation.Error="Validation_Error"  />
+
+                                    <TextBlock Grid.Row="3" Grid.Column="0" Text="Category:" VerticalAlignment="Center"/>
+                                    <StackPanel Grid.Row="3" Grid.Column="1" Margin="0,3" Orientation="Horizontal" HorizontalAlignment="Stretch">
+                                        <ComboBox MinWidth="200" ItemsSource="{Binding Categories, Mode=OneWay}"  HorizontalAlignment="Stretch"
+                                                  DisplayMemberPath="DisplayName" VerticalContentAlignment="Center"
+                                                  
+                                                  SelectedItem="{Binding SelectedCategory}" />
+                                        <Button Foreground="White" x:Name="BtnAddNewCategory"  Content="  + " FontSize="14" 
+                                                    Command="{Binding AddNewCategoryCommand}" 
+                                                    FontWeight="ExtraBold" Margin="0,0,0,0" ToolTip="Add New Category"/>
+                                    </StackPanel>
+
+                                    <TextBlock Grid.Row="4" Grid.Column="0" Text="More Description:" VerticalAlignment="Center"/>
+                                    <TextBox Grid.Row="4" Grid.Column="1" Grid.RowSpan="3" TextWrapping="Wrap"
+                                             Text="{Binding SelectedClient.Description}" Margin="0,5" />
+
+                                    <TextBlock Grid.Row="4" Grid.Column="2" Text=" Address: " 
+                                               VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                                    <StackPanel Grid.Row="4" Grid.Column="3" Grid.RowSpan="3" Margin="0,5,0,0"
+                                                Orientation="Vertical">
+                                        <ListBox x:Name="LstStaffAddress"  
+                                                 HorizontalAlignment="Stretch" 
+                                                 VerticalContentAlignment="Center"
+                                                 Visibility="Visible" 
+                                                 Background="Transparent" Focusable="False"
+                                                 BorderBrush="Transparent" 
+                                                 MinHeight="70" MinWidth="50" 
+                                                 ItemsSource="{Binding ClientAdressDetail, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                 ItemTemplate="{DynamicResource AddressBoxDataTemplate}"
+                                                 Style="{StaticResource myListboxStyle}"/>
+
+                                        <Button x:Name="BtnAddress" Margin="5,0"
+                                            Content=" _View/Change Address  " Tag="ClientAddress" 
+                                            Command="{Binding ClientAddressViewCommand}" />
+                                    </StackPanel>
+                                </Grid>
+                            </Grid>
+                        </Expander>
+
+                        <Expander Grid.Row="3" Margin="5,0" Header="Advanced" 
+                                  Visibility="Visible"
+                                  IsExpanded="False"
+                                  TextBlock.Foreground="White">
+                            <Grid Margin="5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="30"/>
+                                    <RowDefinition Height="30"/>
+                                </Grid.RowDefinitions>
+
+                                <CheckBox Grid.Row="0" Grid.Column="1" Content="Is Active" 
+                                              IsChecked="{Binding SelectedClient.IsActive, Mode=TwoWay}" 
+                                              VerticalAlignment="center" FontSize="14" Foreground="White"/>
+
+                                <TextBlock Grid.Row="1" Grid.Column="0" Text=" Code: " VerticalAlignment="Center"/>
+                                <Grid Grid.Row="1" Grid.Column="1">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBox x:Name="TxtCustCode" VerticalAlignment="Stretch" IsEnabled="True"
+                                             ToolTip="{Binding (Validation.Errors)[0].ErrorContent, ElementName=TxtCustCode}"
+                                             Text="{Binding SelectedClient.Code, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True,NotifyOnValidationError=True}" 
+                                             Validation.Error="Validation_Error" Margin="0,5,0,5" />
+                                    <Button Grid.Column="1" Content="_Change Code" Tag="Change Code" x:Name="BtnChangeCode"
+                                        Command="{Binding ChangeClientCodeViewCommand}" 
+                                        CommandParameter="{Binding ElementName=BtnChangeCode}"                                     
+                                        Style="{StaticResource bottomButtons}"/>
+                                </Grid>
+
+                                <Button Grid.Row="1" Grid.Column="3" Content="Documents Entry" Tag="Chane Code" x:Name="BtnDocuments"
+                                        Command="{Binding DocumentsViewCommand}" HorizontalAlignment="Stretch"
+                                        CommandParameter="{Binding ElementName=BtnDocuments}"
+                                        Margin="10,2,0,2"/>
+                            </Grid>
+                        </Expander>
+
+                        <GridSplitter Grid.Row="4" HorizontalAlignment="Stretch" />
+
+                        <StackPanel Orientation="Horizontal" Grid.Row="5" Background="Transparent" HorizontalAlignment="Right">
+
+                            <Button Content="_Add New" Tag="Add New" x:Name="BtnAddNew"
+                                    Command="{Binding AddNewClientViewCommand}" 
+                                    CommandParameter="{Binding ElementName=BtnAddNew}"                                     
+                                    Style="{StaticResource bottomButtons}"/>
+
+                            <Button Content="_Save" Tag="Save" x:Name="BtnSave"
+                                    Command="{Binding SaveClientViewCommand}" 
+                                    CommandParameter="{Binding ElementName=BtnSave}" 
+                                    Style="{StaticResource bottomButtons}" />
+
+                            <Button Content="_Delete" Tag="Delete" x:Name="BtnDelete"
+                                    Command="{Binding DeleteClientViewCommand}" 
+                                    CommandParameter="{Binding ElementName=BtnDelete}"                                     
+                                    Style="{StaticResource bottomButtons}"/>
+
+                        </StackPanel>
+
+                    </Grid>
+                </Grid>
+
+            </Grid>
+        </Border>
+    </Grid>
+</Window>
